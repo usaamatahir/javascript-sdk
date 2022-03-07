@@ -25,20 +25,20 @@
 	},
 	"scripts": {
 		"build-browser": "TARGET=browser webpack --progress --config webpack.config.js && TARGET=browser NODE_ENV=production webpack --progress --config webpack.config.js",
-		"build-cjs": "TARGET=cjs babel src --delete-dir-on-start --ignore 'src/__tests__' --ignore 'src/browser.js' -d lib",
-		"build-mjs": "TARGET=mjs babel src --delete-dir-on-start --ignore 'src/__tests__' --ignore 'src/browser.js' --out-file-extension=.mjs -d es",
+		"build-cjs": "TARGET=cjs babel dist --delete-dir-on-start --ignore 'dist/__tests__' --ignore 'dist/browser.js' -d lib",
+		"build-mjs": "TARGET=mjs babel dist --delete-dir-on-start --ignore 'dist/__tests__' --ignore 'dist/browser.js' --out-file-extension=.mjs -d es",
 		"build": "npm run -s format && npm run -s lint && npm run -s test && npm run -s build-mjs && npm run -s build-cjs && npm run -s build-browser",
-		"lint": "eslint -f stylish 'src/**/*.{js,mjs,jsx}'",
+		"build-ts": "tsc --build",
+		"lint": "eslint -f stylish 'src/**/*.{ts,tsx,mjs,jsx}'",
 		"format": "prettier --write '**/*.{js,mjs,jsx,json}'",
 		"prepack": "npm -s upgrade && npm run -s build",
-		"test": "jest --coverage"
+		"test": "jest --coverage ./src"
 	},
 	"dependencies": {
 		"@babel/preset-typescript": "^7.16.7",
 		"node-fetch": "^2.6.7",
 		"rfdc": "^1.2.0",
-		"ts-node": "^10.5.0",
-		"typescript": "^4.5.5"
+		"ts-node": "^10.5.0"
 	},
 	"devDependencies": {
 		"@babel/cli": "^7.17.3",
@@ -69,6 +69,7 @@
 		"prettier": "^2.4.1",
 		"terser-webpack-plugin": "^5.3.1",
 		"ts-jest": "^27.1.3",
+		"typescript": "^4.6.2",
 		"webpack": "^5.60.0",
 		"webpack-bundle-analyzer": "^4.5.0",
 		"webpack-cli": "^4.9.1"

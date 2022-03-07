@@ -84,7 +84,7 @@ export default class Context {
 	_indexVariables: IIndexVariables[] | IIndexVariables;
 	_finalizing: Promise<unknown>;
 	_data: any;
-	constructor(sdk: SDK, options?: IOptions, params?: Params | IParams, promise?: any) {
+	constructor(sdk?: SDK, options?: IOptions, params?: Params | IParams, promise?: any) {
 		this._sdk = sdk;
 		this._publisher = options.publisher || this._sdk.getContextPublisher();
 		this._dataProvider = options.dataProvider || this._sdk.getContextDataProvider();

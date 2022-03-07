@@ -268,6 +268,7 @@ describe("Client", () => {
 				body: {},
 			})
 			.catch((error) => {
+				console.log("Error ==> ", error);
 				expect(fetch).toHaveBeenCalledTimes(6);
 				expect(fetch).toHaveBeenLastCalledWith(`${endpoint}/context?a=1`, {
 					method: "PUT",
@@ -379,6 +380,7 @@ describe("Client", () => {
 					body: JSON.stringify({}),
 					signal: expect.any(Object),
 				});
+				console.log("Error ==> ", error);
 
 				expect(error).toBeInstanceOf(RetryError);
 				expect(setTimeout).toHaveBeenCalledTimes(6);
@@ -435,6 +437,8 @@ describe("Client", () => {
 				done("unexpected");
 			})
 			.catch((error) => {
+				console.log("Error ==> ", error);
+
 				expect(error).toBeInstanceOf(TimeoutError);
 
 				done();
