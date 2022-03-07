@@ -1,6 +1,6 @@
 module.exports = {
 	root: true,
-	parser: "@babel/eslint-parser",
+	parser: "@typescript-eslint/parser",
 	env: {
 		browser: true,
 		node: true,
@@ -16,7 +16,7 @@ module.exports = {
 		//		"require-atomic-updates": "error",
 		"array-callback-return": "error",
 		"block-scoped-var": "error",
-		"class-methods-use-this": "error",
+		"class-methods-use-this": "off",
 		"consistent-return": "error",
 		"default-case": ["error", { commentPattern: "^skip|no\\s+default" }],
 		"default-param-last": "error",
@@ -38,7 +38,7 @@ module.exports = {
 		"no-useless-return": "error",
 		"no-void": "error",
 		"wrap-iife": ["error", "inside"],
-		"no-shadow": ["error", { builtinGlobals: true, hoist: "never" }],
+		"no-shadow": ["error", { builtinGlobals: false, hoist: "never" }],
 		"no-use-before-define": "error",
 		"no-var": "error",
 		"prefer-numeric-literals": "error",
@@ -47,5 +47,8 @@ module.exports = {
 		"prefer-rest-params": "error",
 		"prefer-spread": "error",
 		"prefer-template": "error",
+		"typescript-eslint/ban-types": "off",
+		"no-unused-vars": "off",
+		"no-undef": "off",
 	},
 };

@@ -98,6 +98,7 @@ export function hashUnit(value: string | number) {
 	return base64UrlNoPadding(md5(stringToUint8Array(unit).buffer));
 }
 
+// eslint-disable-next-line consistent-return
 export function chooseVariant(split: number[] | number, prob: number): number {
 	let cumSum = 0.0;
 	if (typeof split === "object") {

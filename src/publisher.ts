@@ -1,8 +1,7 @@
 import { Context, SDK } from ".";
-import { IRequest } from "./types";
 
 export class ContextPublisher {
-	publish(request: any, sdk: SDK, context: Context, requestOptions?: any): Promise<any> {
+	publish(request: unknown, sdk: SDK, context: Context, requestOptions?: unknown): Promise<unknown> {
 		return sdk.getClient().publish(request, requestOptions);
 	}
 }
