@@ -16,7 +16,7 @@ export interface IRequest {
 }
 
 export interface Params {
-	units: Record<string, string | number>;
+	units?: Record<string, string | number>;
 	hashed?: boolean;
 	publishedAt?: number;
 	goals?: Record<string, unknown>[];

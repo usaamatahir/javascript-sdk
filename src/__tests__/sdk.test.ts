@@ -243,6 +243,7 @@ describe("SDK", () => {
 				},
 			};
 
+			// @ts-ignore
 			expect(() => sdk.createContext(params, contextOptions)).toThrow(
 				new Error("Unit 'session_id' UID is of unsupported type 'boolean'. UID must be one of ['string', 'number']")
 			);
@@ -384,6 +385,7 @@ describe("SDK", () => {
 			};
 
 			expect(() =>
+				// @ts-ignore
 				sdk.createContextWith(params, contextOptions, {
 					publishDelay: 0,
 					refreshPeriod: 0,

@@ -107,6 +107,7 @@ export default class SDK {
 			}
 
 			if (type === "string") {
+				// @ts-ignore
 				if (entry[1]?.length === 0) {
 					throw new Error(`Unit '${entry[0]}' UID length must be >= 1`);
 				}
