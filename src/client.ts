@@ -3,28 +3,32 @@ import fetch from "./fetch"; // eslint-disable-line no-shadow
 import { AbortController } from "./abort";
 import { AbortError, RetryError, TimeoutError } from "./errors";
 import { AbortSignal } from "./abort-controller-shim";
+import { Attrs, IApplication, IExposures, IGoals, IUnits } from "./context";
 
-interface IApplication {
-	name: string;
-	version: number | string;
+export interface IRequest {
+	publishedAt?: number;
+	units?: IUnits[];
+	hashed?: boolean;
+	goals?: IGoals[];
+	exposures?: IExposures[];
+	attributes?: Attrs[];
+	test?: number;
 }
 
-interface Params {
-	units?: {
-		session_id: string;
-	};
-	hashed?: boolean | string;
-	publishedAt?: string | number;
-	goals?: any[];
-	exposures?: any[];
-	attributes?: any[];
+export interface Params {
+	units: Record<string, string | number>;
+	hashed?: boolean;
+	publishedAt?: number;
+	goals?: Record<string, unknown>[];
+	exposures?: Record<string, unknown>[];
+	attributes?: Record<string, unknown>[];
 }
 
-interface IOptions {
+export interface IClientOptions {
 	agent: string;
-	apiKey: string | undefined;
-	application: IApplication | undefined;
-	environment: string | undefined;
+	apiKey: string;
+	application: IApplication;
+	environment: string;
 	retries: number;
 	timeout: number;
 	endpoint: string;
@@ -47,9 +51,9 @@ interface IContextOptions {
 type ErrorType = Error & { _bail?: boolean };
 
 export default class Client {
-	_opts: IOptions;
+	_opts: IClientOptions;
 	_delay: number;
-	constructor(opts?: IOptions) {
+	constructor(opts?: IClientOptions) {
 		this._opts = Object.assign(
 			{
 				agent: "javascript-client",

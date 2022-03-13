@@ -1,18 +1,51 @@
 import { arrayEqualsShallow, hashUnit, isObject, isNumeric } from "./utils";
 import { VariantAssigner } from "./assigner";
 import { ContextDataProvider, ContextPublisher, SDK } from ".";
-import { Attrs, expectedAttrs, IExposures, IGoals, IRequest, IUnits } from "./types";
+import { IRequest, Params } from "./client";
 
-interface IApplication {
+export type expectedAttrs = string[] | number[] | boolean[] | string | number | boolean | unknown;
+
+export interface Attrs {
+	name: expectedAttrs;
+	value: expectedAttrs;
+	setAt: number;
+}
+
+export interface IExposures {
+	id: number;
+	name: string;
+	exposedAt: number;
+	unit: string;
+	variant: number | string;
+	assigned: string | boolean;
+	eligible: string | boolean;
+	overridden: string | boolean;
+	fullOn: string | boolean;
+	custom: string | boolean;
+}
+
+export interface IGoals {
+	name: string;
+	properties: any;
+	achievedAt: number;
+}
+export interface IUnits {
+	session_id?: string;
+	user_id?: number;
+	type: string;
+	uid: any;
+}
+
+export interface IApplication {
 	name: string;
 	version: number | string;
 }
 
-interface IOptions {
+export interface IContextOptions {
 	agent?: string;
-	apiKey?: string | undefined;
-	application?: IApplication | undefined;
-	environment?: string | undefined;
+	apiKey?: string;
+	application?: IApplication;
+	environment?: string;
 	retries?: number;
 	timeout?: number;
 	endpoint?: string;
@@ -23,29 +56,16 @@ interface IOptions {
 	eventLogger?: (event: string, data: any) => void;
 }
 
-interface IIndexVariables {
+type IndexVariable = {
 	data?: {
 		name: string;
 	};
-}
+};
 
-interface Params {
-	units: {
-		session_id?: boolean;
-	};
-}
-
-interface IParams {
-	units: {
-		session_id?: string;
-		user_id?: number;
-	};
-}
-
-interface IAssignment {
+type IAssignment = {
 	id: number;
 	iteration: number;
-	fullOnVariant: number | string;
+	fullOnVariant: number | null;
 	unitType: string | null;
 	variant: number | string;
 	assigned: boolean;
@@ -54,16 +74,16 @@ interface IAssignment {
 	fullOn: boolean;
 	custom?: boolean;
 	exposed: boolean;
-	trafficSplit?: number | string;
-	variables?: any;
-}
+	trafficSplit?: number[];
+	variables?: Record<string, unknown>;
+};
 
 export default class Context {
 	_sdk: SDK;
 	_publisher: ContextPublisher;
 	_dataProvider: ContextDataProvider;
 	_eventLogger: any;
-	_opts: IOptions;
+	_opts: IContextOptions;
 	_pending: number;
 	_failed: boolean;
 	_finalized: boolean;
@@ -75,16 +95,16 @@ export default class Context {
 	_overrides: {};
 	_cassignments: {};
 	_assignments: {};
-	_params: Params | IParams;
+	_params: Params;
 	_assigners: {};
 	_hashes: {};
 	_index: {};
 	_refreshInterval: NodeJS.Timer;
-	_promise: any;
-	_indexVariables: IIndexVariables[] | IIndexVariables;
-	_finalizing: Promise<unknown>;
+	_promise: any | Promise<any>;
+	_indexVariables: Record<string, IndexVariable>;
+	_finalizing: Promise<void>;
 	_data: any;
-	constructor(sdk?: SDK, options?: IOptions, params?: Params | IParams, promise?: any) {
+	constructor(sdk?: SDK, options?: IContextOptions, params?: Params, promise?: any) {
 		this._sdk = sdk;
 		this._publisher = options.publisher || this._sdk.getContextPublisher();
 		this._dataProvider = options.dataProvider || this._sdk.getContextDataProvider();

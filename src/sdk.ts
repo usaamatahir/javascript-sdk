@@ -1,41 +1,8 @@
-import Client from "./client";
-import Context from "./context";
+import Client, { Params } from "./client";
+import Context, { IContextOptions } from "./context";
 import { ContextPublisher } from "./publisher";
 import { ContextDataProvider } from "./provider";
 import { isBrowser } from "./utils";
-
-interface Params {
-	units: {
-		session_id: boolean;
-	};
-}
-
-interface IParams {
-	units: {
-		session_id?: string;
-		user_id?: number;
-	};
-}
-
-interface IApplication {
-	name: string;
-	version: number | string;
-}
-
-interface IOptions {
-	agent?: string;
-	apiKey?: string | undefined;
-	application?: IApplication | undefined;
-	environment?: string | undefined;
-	retries?: number;
-	timeout?: number;
-	endpoint?: string;
-	publishDelay: number;
-	refreshPeriod: number;
-	publisher?: ContextPublisher;
-	dataProvider?: ContextDataProvider;
-	eventLogger?: (event: string, data: any) => void;
-}
 
 interface IRequestOptions {
 	timeout?: number;
@@ -77,7 +44,7 @@ export default class SDK {
 		return this._provider.getContextData(this, requestOptions);
 	}
 
-	createContext(params: Params | IParams, options?: IOptions, requestOptions?: IRequestOptions) {
+	createContext(params: Params, options?: IContextOptions, requestOptions?: IRequestOptions) {
 		SDK._validateParams(params);
 
 		options = SDK._contextOptions(options);
@@ -113,14 +80,14 @@ export default class SDK {
 		return this._client;
 	}
 
-	createContextWith(params: Params | IParams, data: object, options?: IOptions) {
+	createContextWith(params: Params, data: object, options?: IContextOptions) {
 		SDK._validateParams(params);
 
 		options = SDK._contextOptions(options);
 		return new Context(this, options, params, data);
 	}
 
-	static _contextOptions(options: IOptions) {
+	static _contextOptions(options: IContextOptions) {
 		return Object.assign(
 			{
 				publishDelay: isBrowser() ? 100 : -1,
@@ -130,7 +97,7 @@ export default class SDK {
 		);
 	}
 
-	static _validateParams(params: Params | IParams) {
+	static _validateParams(params: Params) {
 		for (const entry of Object.entries(params.units)) {
 			const type = typeof entry[1];
 			if (type !== "string" && type !== "number") {
@@ -140,7 +107,7 @@ export default class SDK {
 			}
 
 			if (type === "string") {
-				if (entry[1].length === 0) {
+				if (entry[1]?.length === 0) {
 					throw new Error(`Unit '${entry[0]}' UID length must be >= 1`);
 				}
 			}

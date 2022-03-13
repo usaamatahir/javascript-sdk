@@ -2,24 +2,17 @@
 import { AbortSignal } from "./abort-controller-shim";
 import { AbortError } from "./errors";
 
-// eslint-disable-next-line no-shadow
-
-interface IContextOptions {
+interface IFetchShimOptions {
 	credentials?: string;
 	method?: string;
 	body?: string;
 	signal?: any;
 	headers?: {
-		"Content-Type": string;
-		"X-API-Key": string;
-		"X-Agent": string;
-		"X-Application": string;
-		"X-Environment": string;
-		"X-Application-Version": number | string;
+		[key: string]: string;
 	};
 }
 
-export function fetch(url: string, options?: IContextOptions) {
+export function fetch(url: string, options?: IFetchShimOptions) {
 	options = options || {};
 	return new Promise((resolve, reject) => {
 		const request = new XMLHttpRequest();
